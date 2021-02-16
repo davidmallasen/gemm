@@ -1,14 +1,27 @@
+module matrix_c
+    interface 
+        subroutine c_matrix_multiply(n, c, a, b) bind(c, name="matrix_multiply")
+            use iso_c_binding
+            implicit none
+            integer(c_int), value :: n
+            integer(c_int), dimension(:,:), allocatable :: c
+            integer(c_int), dimension(:,:), allocatable :: a
+            integer(c_int), dimension(:,:), allocatable :: b
+        end subroutine
+    end interface
+end module
+
 module matrix
     implicit none
     
     type matrix_t
-        real, dimension(:,:), allocatable   :: mat
-        integer                             :: d1
-        integer                             :: d2
+        integer, dimension(:,:), allocatable    :: mat
+        integer                                 :: d1
+        integer                                 :: d2
     contains
-        procedure, pass(this) :: init => matrix_init
-        procedure, pass(this) :: free => matrix_free
-        procedure, pass(this) :: multiply => matrix_multiply
+        procedure, pass(this)   :: init => matrix_init
+        procedure, pass(this)   :: free => matrix_free
+        procedure               :: multiply => matrix_multiply_c   
         generic :: operator(*) => multiply
     end type matrix_t
 
@@ -39,24 +52,36 @@ contains
     end subroutine matrix_free
 
     ! General matrix multiply
-    function matrix_multiply(this, b) result(c)
-        class(matrix_t), intent(in) :: this
-        type(matrix_t), intent(in)  :: b
+    function matrix_multiply(a, b) result(c)
+        type(matrix_t), intent(in) :: a
+        type(matrix_t), intent(in) :: b
         type(matrix_t) :: c
 
         integer :: i, j, k
 
-        call c%init(this%d1, b%d2)
+        call c%init(a%d1, b%d2)
 
         do i = 1, c%d1
             do j = 1, c%d2
                 c%mat(i, j) = 0.0
-                do k = 1, this%d2
-                    c%mat(i, j) = c%mat(i, j) + this%mat(i, k) * b%mat(k, j)
+                do k = 1, a%d2
+                    c%mat(i, j) = c%mat(i, j) + a%mat(i, k) * b%mat(k, j)
                 end do
             end do
         end do
     end function matrix_multiply
+
+    ! General matrix multiply in c
+    function matrix_multiply_c(a, b) result(c)
+        use matrix_c
+        class(matrix_t), intent(in) :: a
+        type(matrix_t), intent(in) :: b
+        type(matrix_t) :: c
+
+        call c%init(a%d1, b%d2)
+
+        call c_matrix_multiply(a%d1, c%mat, a%mat, b%mat)
+    end function matrix_multiply_c
     
 end module matrix
 
