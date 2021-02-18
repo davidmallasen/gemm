@@ -4,9 +4,9 @@ module matrix_c
             use iso_c_binding
             implicit none
             integer(c_int), value :: n
-            integer(c_int), dimension(:,:), allocatable :: c
-            integer(c_int), dimension(:,:), allocatable :: a
-            integer(c_int), dimension(:,:), allocatable :: b
+            integer(c_int)        :: c(*)
+            integer(c_int)        :: a(*)
+            integer(c_int)        :: b(*)
         end subroutine
     end interface
 end module
@@ -74,6 +74,7 @@ contains
     ! General matrix multiply in c
     function matrix_multiply_c(a, b) result(c)
         use matrix_c
+        use iso_c_binding
         class(matrix_t), intent(in) :: a
         type(matrix_t), intent(in) :: b
         type(matrix_t) :: c
@@ -97,14 +98,17 @@ program gemm_test
 
     ! Fill A, B with data
     A%mat(1, 1) = 1
-    A%mat(1, 2) = 0
-    A%mat(2, 1) = 0
-    A%mat(2, 2) = 1
+    A%mat(1, 2) = 2
+    A%mat(2, 1) = 3
+    A%mat(2, 2) = 4
 
-    B%mat(1, 1) = 2 
-    B%mat(1, 2) = 0
-    B%mat(2, 1) = 0
-    B%mat(2, 2) = 1
+    B%mat(1, 1) = 5 
+    B%mat(1, 2) = 6
+    B%mat(2, 1) = 7
+    B%mat(2, 2) = 8
+
+    !| 1 3 |   | 5 7 |   | 23 31 |
+    !| 2 4 | x | 6 8 | = | 34 46 |
 
     C = A * B
     
