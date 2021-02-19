@@ -51,4 +51,4 @@ The python module will be built into the `gemm_py/build/` directory. It is in th
 
 ## Using a custom gemm shared library in c
 
-In this case you should follow the same header as in `gemm_c/matrix.h`, name the shared library as `libmatrix.so` and copy it to the `gemm_c` directory as `gemm_c/libmatrix.so.
+In this case you should follow the same header as in `gemm_c/matrix.h`, name the shared library as `libmatrix.so` and copy it to the `gemm_c` directory as `gemm_c/libmatrix.so`.
