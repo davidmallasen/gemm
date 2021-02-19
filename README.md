@@ -15,6 +15,8 @@ In directory `gemm_c` run:
 gcc -fPIC -shared -o libmatrix.so matrix.c
 ~~~
 
+This will create a row-major order matrix multiplication.
+
 ## Create gemm executable in fortran/c
 
 In directory `gemm_fort` run:
@@ -26,6 +28,8 @@ make
 ~~~
 
 To execute run `./bin/gemm_test.out`.
+
+The result should print `Column-major order matrix multiply in c!` as it is using the local column-major c algorithm.
 
 ## Python matrix extension
 
@@ -48,6 +52,8 @@ python3 run_matrix.py
 ~~~
 
 The python module will be built into the `gemm_py/build/` directory. It is in this directory where you should execute python so that it can find the matrix module.
+
+The matrix multiplication should print `Row-major order matrix multiply in c!` as it is using the shared library c algorithm. 
 
 ## Using a custom gemm shared library in c
 

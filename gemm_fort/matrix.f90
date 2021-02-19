@@ -107,11 +107,17 @@ program gemm_test
     B%mat(2, 1) = 7
     B%mat(2, 2) = 8
 
-    !| 1 3 |   | 5 7 |   | 23 31 |
-    !| 2 4 | x | 6 8 | = | 34 46 |
+    !| 1 2 |   | 5 6 |   | 19 22 |
+    !| 3 4 | x | 7 8 | = | 43 50 |
 
     C = A * B
     
+    write(*,*) 'A: ', A%mat
+    write(*,*) 'B: ', B%mat
+    write(*,*) 'C: ', C%mat
+    
+    C = matrix_multiply(A, B)
+
     write(*,*) 'A: ', A%mat
     write(*,*) 'B: ', B%mat
     write(*,*) 'C: ', C%mat

@@ -8,7 +8,7 @@ set(CMAKE_C_COMPILER gcc)
 set(CMAKE_Fortran_COMPILER gfortran)
 
 add_executable(gemm_test.out
-    ../gemm_c/matrix.c
+    matrix.c
     matrix.f90
 )
 
