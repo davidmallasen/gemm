@@ -1,6 +1,6 @@
 module matrix_c
     interface 
-        subroutine c_matrix_multiply(n, c, a, b) bind(c, name="matrix_multiply")
+        subroutine c_matrix_multiply(n, c, a, b) bind(c, name="gemm")
             use iso_c_binding
             implicit none
             integer(c_int), value :: n

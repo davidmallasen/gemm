@@ -1,7 +1,7 @@
 #include "matrix.h"
 #include <stdio.h>
 
-void matrix_multiply(int n, int* c, int* a, int* b) {
+void gemm(int n, int* c, int* a, int* b) {
     printf("Matrix multiply in c!\n");
 
     for(int i = 0; i < n; ++i) {
