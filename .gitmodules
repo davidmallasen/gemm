@@ -1,4 +1,4 @@
 [submodule "gemm_py/pybind11"]
 	path = gemm_py/pybind11
-	url = ../../pybind/pybind11
+	url = https://github.com/pybind/pybind11.git
 	branch = stable
