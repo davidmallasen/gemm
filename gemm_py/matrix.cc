@@ -24,7 +24,6 @@ void gemm_wrapper(py::array_t<int, py::array::c_style | py::array::forcecast> py
     if (a_buffer.size != b_buffer.size || a_buffer.size != c_buffer.size) {
         throw std::runtime_error("Error: size of A, B and C must match");
     }
-    // TODO: More sanity checks
 
     // Extract raw pointers
     int* c = (int*) c_buffer.ptr;
