@@ -25,12 +25,38 @@ void gemm_wrapper(py::array_t<int, py::array::c_style | py::array::forcecast> py
         throw std::runtime_error("Error: size of A, B and C must match");
     }
 
+    int n = c_buffer.shape[0];
+
     // Extract raw pointers
     int* c = (int*) c_buffer.ptr;
     int* a = (int*) a_buffer.ptr;
     int* b = (int*) b_buffer.ptr;
 
-    gemm(c_buffer.shape[0], c, a, b);
+    // Allocate memory for the column-major gemm library and assign values
+    int* a_ = (int*) malloc(n * n * sizeof(int));
+    int* b_ = (int*) malloc(n * n * sizeof(int));
+    int* c_ = (int*) malloc(n * n * sizeof(int));
+    
+    int i, j;
+    for(i = 0; i < n; ++i) {
+        for(j = 0; j < n; ++j) {
+            a_[i + n * j] = a[j + n * i];
+            b_[i + n * j] = b[j + n * i];
+        }
+    }
+
+    gemm(n, c_, a_, b_);
+
+    // Transpose the result back to row-major order and free memory
+    for(i = 0; i < n; ++i) {
+        for(j = 0; j < n; ++j) {
+            c[i + n * j] = c_[j + n * i];
+        }
+    }
+
+    free(c_);
+    free(b_);
+    free(a_);
 }
 
 PYBIND11_MODULE(matrix, m)
